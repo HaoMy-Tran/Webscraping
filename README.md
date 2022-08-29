@@ -4,7 +4,7 @@ This is a small project that I use ```BeautifulSoup4``` to scrape list of produc
 ```BeautifulSoup``` is a simple, user-friendly tool for anyone to learn Web Scraping. For the scope of this project, I will focus on what ```BeautifulSoup``` can do in this website and finally export as a CSV file.
 
 ### File reading guide
-Along with this is the complete code file and the csv file as the result of this project. Because of the interest of time, I only scraped 5 pages of the website. However, that is enough to check for the efficiency of my code. If you are interested, you can scrape all the pages in this website only by changing the input of page_last parameter which I will mention later.
+Along with this is the csv file as the result of this project. Because of the interest of time, I only scraped 5 pages of the website. However, that is enough to check for the efficiency of my code. If you are interested, you can scrape all the pages in this website only by changing the input of page_last parameter which I will mention later.
 
 Let's get started.
 ### Project guide
@@ -114,6 +114,54 @@ I used ```pandas``` to create a new dataframe and converted to csv file:
  })
 
 product_info.to_csv('product_info.csv', index = False, encoding = 'utf-8')
+```
+### Complete code
+```
+# Setting up
+from bs4 import BeautifulSoup
+import requests
+import pandas as pd
+import csv
+
+# Pagination
+# Create a function with parameters are generic_url and page_number
+product_name = []
+product_brand = []
+product_price =[]
+product_link = []
+product_image = []
+def pages(generic_url, page_number, page_last):
+    while page_number <= page_last:
+        url = generic_url + str(page_number)
+        html_text = requests.get(url).text
+        soup = BeautifulSoup(html_text,'lxml')
+        product_list = soup.find_all('li', class_ = 'item product product-item')
+        # Brand
+        product_brand.extend([product.find('span', class_ = 'brand-name').text.replace(' -','') for product in product_list])
+        # Name
+        product_name.extend([product.find('a', class_='product-item-link').contents[2].strip() for product in product_list])
+        # Price
+        product_price.extend([product.find('span', class_ = 'price').text.replace('đ','').strip() for product in product_list])
+        # Link
+        product_link.extend([product.find('a', class_='product-item-link').get('href') for product in product_list])
+        # Image
+        product_image.extend([product.find('img', class_='product-image-photo').get('src') for product in product_list])
+        # Generate urls for next pages
+        page_number +=1
+
+pages('https://acfc.com.vn/nu/trang-phuc-nu.html?p=',1,5 )
+# Save to CSV
+
+
+product_info = pd.DataFrame({
+    'Brand': product_brand,
+    'Name': product_name,
+    'Price': product_price,
+    'Link': product_link,
+    'Image': product_image
+})
+
+product_info.to_csv('product_infor.csv',index=False, encoding= 'utf-8', sep= ',')
 ```
 ### Limits
 When looking at the website, on the left side is the filter to maximize the the search results. ```BeautifulSoup``` can not do anything on this part. Rather, some other tools like ```Selenium``` or ```Scrapy``` are suggested.
