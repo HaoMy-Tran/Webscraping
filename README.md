@@ -1,4 +1,4 @@
-# Webscraping (online shopping platform)
+## Webscraping (online shopping platform)
 ### Intro
 This is a small project that I use ```BeautifulSoup4``` to scrape list of product in [ACFC](https://www.acfc.com.vn/) which is an online shopping website. The objective is to extract information of all the items in Women Clothing (name, brand, price, link, and image). 
 ```BeautifulSoup``` is a simple, user-friendly tool for anyone to learn Web Scraping. For the scope of this project, I will focus on what ```BeautifulSoup``` can do in this website and finally export as a CSV file.
@@ -37,7 +37,7 @@ We can see the string is wrap in a tag named ```<span``` and ```class="brand_nam
 product_list = soup.find_all('li', class_ = 'item product product-item')
 ```
 
-**Brand**
+**Brand** <br />
 The brand names of the products are the text part of ```<span``` tag with ```class="brand-name"```. So I looped through all text of this list and extract all the results in to a new product_brand list using list comprehension:
 
 ```
@@ -53,11 +53,13 @@ Similar to Brand but just one small thing to be notice. The names can not be ext
 So I extract the string ```'Áo Kiểu Nữ Tay Dài Ls Cropped Wra'``` by using ```content()``` method:
 ```
 product_name = [product.find('a', class_ ='product-item-link').content[2].strip for product in product_list]
-**Price**
+```
+**Price** <br />
 Similarly, list of products' price was created by:
 
 ```
 product_price = [product.find('span', class_ = 'price').text.replace('đ','').strip() for product in product_list]
+```
 **Link** <br />
 ```
 product_link = [product.find('a', class_ = 'product-item-link').get('href') for product in product_list]
@@ -99,7 +101,7 @@ Finally, I inputed values for the three parameters
 ```
 pages(https://acfc.com.vn/nu/trang-phuc-nu.html?p=',1,213)
 ```
-### Create data frame and export to CSV file. 
+### Create a data frame and export to CSV file. 
 I used ```pandas``` to create a new dataframe and converted to csv file:
  ```
  product_info = pd.DataFrame({
@@ -112,6 +114,6 @@ I used ```pandas``` to create a new dataframe and converted to csv file:
 
 product_info.to_csv('product_info.csv', index = False, encoding = 'utf-8')
 ```
-## Limits
-When looking at the website, on the left side is the filter to maximize the the search results. BeautifulSoup can not do anything on this part. Rather, some other tools like Selenium or Scrapy are suggested.
+### Limits
+When looking at the website, on the left side is the filter to maximize the the search results. ```BeautifulSoup``` can not do anything on this part. Rather, some other tools like ```Selenium``` or ```Scrapy``` are suggested.
 
