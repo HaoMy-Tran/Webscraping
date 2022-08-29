@@ -15,6 +15,7 @@ Fist, I imported some of the packages that would be used in this project:
  from bs4 import BeautifulSoup
  import requests
  import padas as pd
+ import csv
  ```
 In case you do not have ```BeautifulSoup``` installed in your PC, you can install it by pip install. Then, I let ```BeautifulSoup``` know the URL of the website and what kind of library I wanted to use:
 ```
