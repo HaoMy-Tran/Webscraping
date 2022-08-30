@@ -1,4 +1,4 @@
-## Webscraping (online shopping platform)
+## Webscraping (online shopping website)
 ### Intro
 This is a small project that I use ```BeautifulSoup4``` to scrape list of product in [ACFC](https://www.acfc.com.vn/) which is an online shopping website. The objective is to extract information of all the items in Women Clothing (name, brand, price, link, and image). 
 ```BeautifulSoup``` is a simple, user-friendly tool for anyone to learn Web Scraping. For the scope of this project, I will focus on what ```BeautifulSoup``` can do in this website and finally export as a CSV file.
